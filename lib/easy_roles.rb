@@ -28,7 +28,7 @@ module EasyRoles
         end
         
         def make_default_roles
-          clear_roles if roles.nil?
+          clear_roles if #{name}.nil?
         end
         
         private :make_default_roles
