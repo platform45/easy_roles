@@ -4,9 +4,13 @@ Simple rails gem for basic role authorization with ruby on rails.
 
 == Install
 
-  gem install platform45-easy_roles --source http://gems.github.com
+  gem install gemcutter
+  gem tumble
+  gem install easy_roles 
   
-  or it can be installed as a rails plugin.
+or it can be installed as a rails plugin.
+
+  script/plugin install git://github.com/platform45/easy_roles.git
   
 == Basic Setup
 
