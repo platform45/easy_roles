@@ -1,0 +1,120 @@
+= Easy Roles
+
+Simple rails gem for basic role authorization with ruby on rails.
+
+== Install
+
+  gem install platform45-easy_roles --source http://gems.github.com
+  
+  or it can be installed as a rails plugin.
+  
+== Basic Setup
+
+Add the following to your enviroment.rb in the rails initializer block
+
+  config.gem 'platform45-easy_roles', :lib => 'easy_roles', :source => 'http://gems.github.com'
+
+Firstly you need to add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
+
+  t.string :roles, :default => "--- []"
+  
+Then you need to add "easy_roles :column_name" to your model.
+
+  class User < ActiveRecord::Base
+    easy_roles :roles
+  end
+  
+And thats it.
+
+== Usage
+
+Easy roles extends your model, and adds a few methods needed for basic role authorization.
+
+adding a role to a user
+  add_role 'role'
+  
+removing a role from a user
+  remove_role 'role'
+  
+check to see if a user has a certain role
+  has_role? 'role'
+  # or
+  is_role? # role being anything you like, for example 'is_admin?' or 'is_awesome?'
+  
+== Examples
+
+  @user = User.first
+  
+  @user.add_role 'admin'
+  
+  @user.is_admin?
+  => true
+  
+  @user.has_role? 'admin'
+  => true
+  
+  @user.is_awesome?
+  => false
+  
+  @user.add_role 'awesome'
+  
+  @user.is_awesome?
+  => true
+  
+  @user.remove_role 'admin'
+  
+  @user.is_admin?
+  => false
+  
+  etc etc
+
+== Protecting controllers
+
+There are many ways to implement views for specific roles, so I did not specifically supply one. Here's an example on what you could do:
+
+  class ApplicationController < ActionController::Base
+
+     def admin_required
+       unless current_user && current_user.is_admin?
+         flash[:error] = "Sorry, you don't have access to that."
+         redirect_to root_url and return false
+       end
+     end
+   
+  end
+
+Then in your AdminsController or any controller that you only want admins to view:
+
+  class AdminsController < ApplicationController
+     before_filter :admin_required
+  end
+  
+  class MarksController < ApplicationController
+     before_filter :admin_required, :only => :create, :update
+  end
+  
+check out http://blog.platform45.com/2009/10/06/howto-basic-roles-for-users for implementation!
+
+
+== License
+
+Copyright (c) 2009 Platform45
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
