@@ -16,9 +16,9 @@ or it can be installed as a rails plugin.
 
 Add the following to your enviroment.rb in the rails initializer block
 
-  config.gem 'platform45-easy_roles', :lib => 'easy_roles', :source => 'http://gems.github.com'
+  config.gem 'easy_roles', :source => 'http://gemcutter.org'
 
-Firstly you need to add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
+Add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
 
   t.string :roles, :default => "--- []"
   
