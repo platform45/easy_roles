@@ -2,15 +2,15 @@
 
 Gem::Specification.new do |s|
   s.name = %q{easy_roles}
-  s.version = "0.1.0"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Platform45"]
-  s.date = %q{2009-10-07}
+  s.date = %q{2009-10-12}
   s.description = %q{Easy role authorization in rails}
   s.email = %q{ryan@platform45.com}
   s.extra_rdoc_files = ["README.rdoc", "lib/easy_roles.rb"]
-  s.files = ["Manifest", "README.rdoc", "Rakefile", "init.rb", "lib/easy_roles.rb", "easy_roles.gemspec"]
+  s.files = ["Manifest", "README.rdoc", "Rakefile", "easy_roles.gemspec", "init.rb", "lib/easy_roles.rb"]
   s.homepage = %q{http://github.com/platform45/easy_roles}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Easy_roles", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
