@@ -1,13 +1,13 @@
 module EasyRoles
   def self.included(base)
     base.extend ClassMethods
+    base.send :alias_method_chain, :method_missing, :roles
   end
   
   module ClassMethods
     def easy_roles(name)
       serialize name.to_sym, Array
       before_validation_on_create :make_default_roles
-      self.superclass.send :alias_method_chain, :method_missing, :roles
       
       class_eval <<-EOC
         def has_role?(role)
