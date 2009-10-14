@@ -97,7 +97,7 @@ Then in your AdminsController or any controller that you only want admins to vie
      before_filter :admin_required, :only => :create, :update
   end
   
-check out http://blog.platform45.com/2009/10/06/howto-basic-roles-for-users for implementation!
+check out http://blog.platform45.com/2009/10/05/howto-basic-roles-for-users for implementation, and http://blog.platform45.com/2009/10/07/easy-roles-gem-released for usage.
 
 
 == License
