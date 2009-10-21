@@ -2,9 +2,9 @@
 
 Simple rails gem for basic role authorization with ruby on rails.
 
-= Changelog
+== Changelog
 
-==21 October 2009 - Version 0.2.0
+=== 21 October 2009 - Version 0.2.0
 Added bang methods for 'add_role' and 'remove_role' which can be accessed through 'add_role!' and 'remove_role!' respectively.
 
 == Install
