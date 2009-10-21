@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'echoe'
 
-Echoe.new('easy_roles', '0.1.3') do |p|
+Echoe.new('easy_roles', '0.2.0') do |p|
   p.description    = "Easy role authorization in rails"
   p.url            = "http://github.com/platform45/easy_roles"
   p.author         = "Platform45"

@@ -17,9 +17,19 @@ module EasyRoles
         def add_role(role)
           self.#{name} << role
         end
+        
+        def add_role!(role)
+          add_role(role)
+          self.save!
+        end
 
         def remove_role(role)
           self.#{name}.delete(role)
+        end
+        
+        def remove_role!(role)
+          remove_role(role)
+          self.save!
         end
         
         def clear_roles
