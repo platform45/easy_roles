@@ -22,8 +22,12 @@ or it can be installed as a rails plugin.
 Add the following to your enviroment.rb in the rails initializer block
 
   config.gem 'easy_roles', :source => 'http://gemcutter.org'
+  
+(from version 0.3.0) use the migration generator
 
-Add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
+  script/generate easy_roles user roles
+
+Or add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
 
   t.string :roles, :default => "--- []"
   

@@ -1,0 +1,11 @@
+NAME
+    easy_roles - generates migration for your roles authorization column
+     
+USAGE
+    ./script/generate easy_roles Model Column_Name
+            
+EXAMPLE
+    ./script/generate easy_roles user roles
+
+MORE INFO
+	http://github.com/platform45/easy_roles
