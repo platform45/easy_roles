@@ -62,7 +62,7 @@ Add the following to your enviroment.rb in the rails initializer block
 
 Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask".
 
-  t.string :roles, :default => "--- []"
+  t.integer :roles_mask, :default => 0
   
 Add "easy_roles :column_name, :method => :bitmask" to your model.
 
@@ -97,8 +97,8 @@ check to see if a user has a certain role
   is_role? # role being anything you like, for example 'is_admin?' or 'is_awesome?'
   
 For every method above there is a bang method too.
-  add_role!
-  remove_role!
+  add_role! 'role'
+  remove_role! 'role'
   
 == Examples
 
@@ -154,9 +154,9 @@ Then in your AdminsController or any controller that you only want admins to vie
 
 Check out http://blog.platform45.com/2009/10/05/howto-basic-roles-for-users for implementation, and http://blog.platform45.com/2009/10/07/easy-roles-gem-released for usage.
 
-Follow me on twitter: ryan_za
+Follow me on twitter: http://twitter.com/ryan_za
 
-Email: ryan@platform45.com
+Email: ryan *at* platform45.com
 
 
 == License
