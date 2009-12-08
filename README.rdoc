@@ -4,6 +4,15 @@ Simple rails gem for basic role authorization with ruby on rails.
 
 == Changelog
 
+=== 08 December 2009 - Version 0.4.1
+Added a bitmask migration generator (Read below for usage)
+
+=== 08 December 2009 - Version 0.4.0
+Added the ability to use bitmasks instead of serializing the roles in a table (Read below on how to setup and use)
+
+=== 17 November 2009 - Version 0.3.0
+Added a generator to generate the database columns "script/generate easy_roles Table Column_Name"
+
 === 21 October 2009 - Version 0.2.0
 Added bang methods for 'add_role' and 'remove_role' which can be accessed through 'add_role!' and 'remove_role!' respectively.
 
@@ -18,6 +27,8 @@ or it can be installed as a rails plugin.
   script/plugin install git://github.com/platform45/easy_roles.git
   
 == Basic Setup
+
+=== Serialize Method
 
 Add the following to your enviroment.rb in the rails initializer block
 
@@ -37,7 +48,38 @@ Then you need to add "easy_roles :column_name" to your model.
     easy_roles :roles
   end
   
-And thats it.
+=== Bitmask Method
+
+==== WARNING: If you plan on using the column name 'roles' for the bitmask method your getter and setter actions will be 'easy_roles' and 'easy_roles=', instead of 'roles' and 'roles='. I would suggest using 'roles_mask' as your roles column for this method.
+
+Add the following to your enviroment.rb in the rails initializer block
+
+  config.gem 'easy_roles', :source => 'http://gemcutter.org'
+  
+(from version 0.4.1) use the migration generator to generate the roles column for your users table
+
+  E.G. script/generate easy_bitmask_roles user roles_mask
+
+Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask".
+
+  t.string :roles, :default => "--- []"
+  
+Add "easy_roles :column_name, :method => :bitmask" to your model.
+
+  class User < ActiveRecord::Base
+    easy_roles :roles_mask, :method => :bitmask
+  end
+  
+And lastly you need to add a constant variable which stores an array of the different roles for your system. The name of the constant must be the name of your column in full caps.
+
+==== WARNING: Bitmask storage relies that you DO NOT change the order of your array of roles, if you need to add a new role, just append it to the end of the array.
+
+  class User < ActiveRecord::Base
+    easy_roles :roles_mask, :method => :bitmask
+    
+    # Constant variable storing roles in the system
+    ROLES_MASK = %w[admin moderator user]
+  end
 
 == Usage
 
@@ -53,6 +95,10 @@ check to see if a user has a certain role
   has_role? 'role'
   # or
   is_role? # role being anything you like, for example 'is_admin?' or 'is_awesome?'
+  
+For every method above there is a bang method too.
+  add_role!
+  remove_role!
   
 == Examples
 
@@ -105,8 +151,12 @@ Then in your AdminsController or any controller that you only want admins to vie
   class MarksController < ApplicationController
      before_filter :admin_required, :only => :create, :update
   end
-  
-check out http://blog.platform45.com/2009/10/05/howto-basic-roles-for-users for implementation, and http://blog.platform45.com/2009/10/07/easy-roles-gem-released for usage.
+
+Check out http://blog.platform45.com/2009/10/05/howto-basic-roles-for-users for implementation, and http://blog.platform45.com/2009/10/07/easy-roles-gem-released for usage.
+
+Follow me on twitter: ryan_za
+
+Email: ryan@platform45.com
 
 
 == License

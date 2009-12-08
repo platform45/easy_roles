@@ -5,43 +5,99 @@ module EasyRoles
   end
   
   module ClassMethods
-    def easy_roles(name)
-      serialize name.to_sym, Array
-      before_validation_on_create :make_default_roles
+    def easy_roles(name, options = {})
       
-      class_eval <<-EOC
-        def has_role?(role)
-          #{name}.include?(role)
-        end
+      options[:method] ||= :serialize
+      
+      if options[:method] == :serialize
+        serialize name.to_sym, Array
+        before_validation_on_create :make_default_roles
+      
+        class_eval <<-EOC
+          def has_role?(role)
+            #{name}.include?(role)
+          end
 
-        def add_role(role)
-          self.#{name} << role
-        end
+          def add_role(role)
+            self.#{name} << role
+          end
         
-        def add_role!(role)
-          add_role(role)
-          self.save!
-        end
+          def add_role!(role)
+            add_role(role)
+            self.save!
+          end
 
-        def remove_role(role)
-          self.#{name}.delete(role)
-        end
+          def remove_role(role)
+            self.#{name}.delete(role)
+          end
         
-        def remove_role!(role)
-          remove_role(role)
-          self.save!
-        end
+          def remove_role!(role)
+            remove_role(role)
+            self.save!
+          end
         
-        def clear_roles
-          self.#{name} = []
-        end
+          def clear_roles
+            self.#{name} = []
+          end
         
-        def make_default_roles
-          clear_roles if #{name}.nil?
-        end
+          def make_default_roles
+            clear_roles if #{name}.nil?
+          end
         
-        private :make_default_roles
-      EOC
+          private :make_default_roles
+        EOC
+      elsif options[:method] == :bitmask
+        
+        def_name = (name == :roles) ? :easy_roles : :roles
+        
+        class_eval <<-EOC
+          def self.list_roles
+            #{name.to_s.upcase}
+          end
+        
+          def #{def_name}=(roles)
+            self.#{name} = (roles & #{name.to_s.upcase}).map { |r| 2**#{name.to_s.upcase}.index(r) }.sum
+          end
+
+          def #{def_name}
+            #{name.to_s.upcase}.reject { |r| ((#{name} || 0) & 2**#{name.to_s.upcase}.index(r)).zero? }
+          end
+          
+          def has_role?(role)
+            #{def_name}.include?(role)
+          end
+          
+          def add_role(role)
+            new_roles = #{def_name}.push(role)
+            self.#{def_name} = new_roles
+          end
+          
+          def add_role!(role)
+            add_role(role)
+            self.save!
+          end
+          
+          def remove_role(role)
+            new_roles = #{def_name}
+            new_roles.delete(role)
+            self.#{def_name} = new_roles
+          end
+          
+          def remove_role!(role)
+            remove_role(role)
+            self.save!
+          end
+          
+          def clear_roles
+            self.#{name} = 0
+          end
+          
+          def clear_roles!
+            self.#{name} = 0
+            self.save!
+          end
+        EOC
+      end
     end
   end
   
