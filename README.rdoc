@@ -4,6 +4,10 @@ Simple rails gem for basic role authorization with ruby on rails.
 
 == Changelog
 
+=== 03 February 2010 - Version 0.4.2
+Fixed migration names
+Does not allow duplicates to be added
+
 === 08 December 2009 - Version 0.4.1
 Added a bitmask migration generator (Read below for usage)
 

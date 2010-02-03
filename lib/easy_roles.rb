@@ -19,7 +19,8 @@ module EasyRoles
           end
 
           def add_role(role)
-            self.#{name} << role
+            clear_roles if self.#{name}.nil?
+            has_role?(role) ? false : self.#{name} << role
           end
         
           def add_role!(role)
@@ -68,7 +69,7 @@ module EasyRoles
           end
           
           def add_role(role)
-            new_roles = #{def_name}.push(role)
+            new_roles = #{def_name}.push(role).uniq
             self.#{def_name} = new_roles
           end
           
