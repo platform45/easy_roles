@@ -4,7 +4,7 @@ Simple rails gem for basic role authorization with ruby on rails.
 
 == Changelog
 
-=== 05 April 2010 - Version 0.4.2
+=== 05 April 2010 - Version 1.0.0
 Serialize method updated for Rails 3 compatibility. (Thanks to firebelly for pointing this out)
 
 === 03 February 2010 - Version 0.4.2
