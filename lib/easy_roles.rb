@@ -11,7 +11,7 @@ module EasyRoles
       
       if options[:method] == :serialize
         serialize name.to_sym, Array
-        before_validation_on_create :make_default_roles
+        respond_to?(:before_validation_on_create) ? before_validation_on_create(:make_default_roles) : before_validation(:make_default_roles, :on => :create)
       
         class_eval <<-EOC
           def has_role?(role)
