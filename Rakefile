@@ -8,5 +8,5 @@ Echoe.new('easy_roles', '1.0.0') do |p|
   p.author         = "Platform45"
   p.email          = "ryan@platform45.com"
   p.ignore_pattern = ["tmp/*", "script/*"]
-  p.development_dependencies = []
+  p.development_dependencies = ["rspec", "active_record", "sqlite"]
 end

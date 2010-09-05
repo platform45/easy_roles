@@ -118,3 +118,4 @@ end
 class ActiveRecord::Base
   include EasyRoles
 end
+
