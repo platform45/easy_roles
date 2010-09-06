@@ -30,6 +30,36 @@ describe EasyRoles do
       user.is_manager?.should be_false
     end
     
+    it "should return the users role through association" do
+      user = BitmaskUser.create(:name => "Bob")
+      user.add_role! "admin"
+      
+      membership = Membership.create(:name => "Test Membership", :bitmask_user => user)
+      
+      Membership.last.bitmask_user.is_admin?.should be_true
+    end
+    
+    it "should get no method error if no easy roles on model" do
+      begin
+      b = Beggar.create(:name => "Ivor")
+      
+      b.is_admin?
+      rescue => e
+        e.class.should == NoMethodError
+      end
+    end
+    
+    it "should get no method error if no easy roles on model even through association" do
+      begin
+      b = Beggar.create(:name => "Ivor")
+      m = Membership.create(:name => "Beggars club", :beggar => b)
+      
+      Membership.last.beggar.is_admin?
+      rescue => e
+        e.class.should == NoMethodError
+      end
+    end
+    
     describe "normal methods" do
       it "should not save to the database if not implicitly saved" do
         user = SerializeUser.create(:name => "Ryan")

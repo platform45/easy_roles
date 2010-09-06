@@ -23,6 +23,16 @@ def setup_db
       t.string :name
       t.integer :roles_mask, :default => 0
     end
+    
+    create_table :memberships do |t|
+      t.string :name
+      t.integer :bitmask_user_id
+      t.integer :beggar_id
+    end
+    
+    create_table :beggars do |t|
+      t.string :name
+    end
   end
 end
 
@@ -39,7 +49,17 @@ class SerializeUser < ActiveRecord::Base
 end
 
 class BitmaskUser < ActiveRecord::Base
+  has_many :memberships
   easy_roles :roles_mask, :method => :bitmask
   
   ROLES_MASK = %w[admin manager user]
+end
+
+class Membership < ActiveRecord::Base
+  belongs_to :bitmask_user
+  belongs_to :beggar
+end
+
+class Beggar < ActiveRecord::Base
+  has_many :memberships
 end
