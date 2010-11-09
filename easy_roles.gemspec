@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{Easy role authorization in rails}
   s.email = %q{ryan@platform45.com}
   s.extra_rdoc_files = ["CHANGELOG.rdoc", "README.rdoc", "lib/easy_roles.rb"]
-  s.files = ["CHANGELOG.rdoc", "README.rdoc", "Rakefile", "easy_roles.gemspec", "generators/easy_bitmask_roles/USAGE", "generators/easy_bitmask_roles/easy_bitmask_roles_generator.rb", "generators/easy_bitmask_roles/templates/migration.rb", "generators/easy_roles/USAGE", "generators/easy_roles/easy_roles_generator.rb", "generators/easy_roles/templates/migration.rb", "init.rb", "lib/easy_roles.rb", "spec/easy_roles_spec.rb", "spec/spec_helper.rb", "Manifest"]
+  s.files = ["CHANGELOG.rdoc", "README.rdoc", "Rakefile", "easy_roles.gemspec", "generators/easy_bitmask_roles/USAGE", "generators/easy_bitmask_roles/easy_bitmask_roles_generator.rb", "generators/easy_bitmask_roles/templates/migration.rb", "generators/easy_roles/USAGE", "generators/easy_roles/easy_roles_generator.rb", "generators/easy_roles/templates/migration.rb", "init.rb", "lib/easy_roles.rb", "spec/easy_roles_spec.rb", "spec/spec_helper.rb"]
   s.homepage = %q{http://github.com/platform45/easy_roles}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Easy_roles", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
