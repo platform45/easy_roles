@@ -4,11 +4,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'active_record'
 require 'easy_roles'
 
-require 'spec'
-require 'spec/autorun'
-
-
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
 end
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
