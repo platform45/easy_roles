@@ -174,7 +174,7 @@ describe EasyRoles do
     it "should allow me to set a users role" do
       user = BitmaskUser.new
       user.add_role 'admin'
-      user.roles.include?("admin").should be_true
+      user._roles.include?("admin").should be_true
     end
     
     it "should return true for is_admin? if the admin role is added to the user" do
