@@ -1,6 +1,6 @@
 = Easy Roles
 
-Simple rails gem for basic role authorization with ruby on rails.
+Simple rails gem for basic role authorization with ruby on rails. This version supports Rails 2.x and Rails 3.x
 
 == Changelog
 
@@ -8,9 +8,7 @@ Please read the CHANGELOG.rdoc file.
 
 == Install
 
-  gem install gemcutter
-  gem tumble
-  gem install easy_roles 
+  gem install easy_roles
   
 or it can be installed as a rails plugin.
 
@@ -20,19 +18,17 @@ or it can be installed as a rails plugin.
 
 === Serialize Method
 
-Add the following to your enviroment.rb in the rails initializer block
+Add the following to your Gemfile:
+  gem 'easy_roles'
 
-  config.gem 'easy_roles', :source => 'http://gemcutter.org'
-  
-(from version 0.3.0) use the migration generator
-
-  script/generate easy_roles user roles
+Then generate the migration:
+  rails g easy_roles user roles
 
 Or add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
 
   t.string :roles, :default => "--- []"
   
-Then you need to add "easy_roles :column_name" to your model.
+Then you need to add "easy_roles :column_name" to your model:
 
   class User < ActiveRecord::Base
     easy_roles :roles
@@ -40,17 +36,15 @@ Then you need to add "easy_roles :column_name" to your model.
   
 === Bitmask Method
 
-==== WARNING: If you plan on using the column name 'roles' for the bitmask method your getter and setter actions will be 'easy_roles' and 'easy_roles=', instead of 'roles' and 'roles='. I would suggest using 'roles_mask' as your roles column for this method.
-
-Add the following to your enviroment.rb in the rails initializer block
-
-  config.gem 'easy_roles', :source => 'http://gemcutter.org'
+Add the following to your Gemfile:
   
-(from version 0.4.1) use the migration generator to generate the roles column for your users table
+  gem 'easy_roles'
 
-  E.G. script/generate easy_bitmask_roles user roles_mask
+Then generate the migration:
+  
+  rails g easy_bitmask_roles user roles
 
-Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask".
+Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask":
 
   t.integer :roles_mask, :default => 0
   
@@ -142,16 +136,13 @@ Then in your AdminsController or any controller that you only want admins to vie
      before_filter :admin_required, :only => :create, :update
   end
 
-Check out http://blog.platform45.com/2009/10/05/howto-basic-roles-for-users for implementation, and http://blog.platform45.com/2009/10/07/easy-roles-gem-released for usage.
-
 Follow me on twitter: http://twitter.com/ryan_za
 
 Email: ryan *at* platform45.com
 
-
 == License
 
-Copyright (c) 2009 Platform45
+Copyright (c) 2011 Platform45
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
