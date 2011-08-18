@@ -1,3 +1,7 @@
+=== 18 August 2011 - Version 2.0.0.beta
+Rewrite the whole gem to be more modular, API is exactly the same
+Only supports Rails 3.x
+
 === 06 September 2010 - Version 1.1.0
 Fixed the issue where the is_user? method was not working through association, if the is_user? method had not been called before
 Wrote tests (FINALLY!!!)
