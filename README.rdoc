@@ -42,7 +42,7 @@ Add the following to your Gemfile:
 
 Then generate the migration:
   
-  rails g easy_bitmask_roles user roles
+  rails g easy_roles user roles --use-bitmask-method
 
 Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask":
 
