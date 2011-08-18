@@ -11,7 +11,7 @@ module EasyRoles
   ALLOWED_METHODS = [:serialize, :bitmask]
   
   ALLOWED_METHODS.each do |method|
-    autoload method.capitalize.to_sym, "methods/#{method}"
+    autoload method.to_s.capitalize.to_sym, "methods/#{method}"
   end
   
   module ClassMethods
