@@ -44,6 +44,10 @@ class SerializeUser < ActiveRecord::Base
   easy_roles :roles, method: :serialize
 end
 
+class UniqueSerializeUser < SerializeUser
+  validates :name, uniqueness: true
+end
+
 class BitmaskUser < ActiveRecord::Base
   has_many :memberships
   easy_roles :roles_mask, method: :bitmask

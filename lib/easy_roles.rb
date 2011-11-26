@@ -15,7 +15,7 @@ module EasyRoles
   end
   
   module ClassMethods
-    def easy_roles(name, options = {})   
+    def easy_roles(name, options = {})
       begin
         raise NameError unless ALLOWED_METHODS.include? options[:method]
       rescue NameError
