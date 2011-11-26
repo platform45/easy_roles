@@ -4,7 +4,7 @@ module EasyRoles
       base.serialize column_name.to_sym, Array
 
       ActiveSupport::Deprecation.silence do
-        base.before_validation(:make_default_roles, :on => :create)
+        base.before_validation(:make_default_roles, on: :create)
       end
       
       base.send :define_method, :has_role? do |role|
