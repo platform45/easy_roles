@@ -31,17 +31,17 @@ describe EasyRoles do
     end
     
     it "should return the users role through association" do
-      user = BitmaskUser.create(:name => "Bob")
+      user = BitmaskUser.create(name: 'Bob')
       user.add_role! "admin"
       
-      membership = Membership.create(:name => "Test Membership", :bitmask_user => user)
+      membership = Membership.create(name: 'Test Membership', bitmask_user: user)
       
       Membership.last.bitmask_user.is_admin?.should be_true
     end
     
     it "should get no method error if no easy roles on model" do
       begin
-      b = Beggar.create(:name => "Ivor")
+      b = Beggar.create(name: 'Ivor')
       
       b.is_admin?
       rescue => e
@@ -51,8 +51,8 @@ describe EasyRoles do
     
     it "should get no method error if no easy roles on model even through association" do
       begin
-      b = Beggar.create(:name => "Ivor")
-      m = Membership.create(:name => "Beggars club", :beggar => b)
+      b = Beggar.create(name: 'Ivor')
+      m = Membership.create(name: 'Beggars club', beggar: b)
       
       Membership.last.beggar.is_admin?
       rescue => e
@@ -62,7 +62,7 @@ describe EasyRoles do
     
     describe "normal methods" do
       it "should not save to the database if not implicitly saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.reload
@@ -71,7 +71,7 @@ describe EasyRoles do
       end
     
       it "should save to the database if implicity saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -81,7 +81,7 @@ describe EasyRoles do
       end
       
       it "should clear all roles and not save if not implicitly saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -96,7 +96,7 @@ describe EasyRoles do
       end
       
       it "should clear all roles and save if implicitly saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -112,7 +112,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and not save unless implicitly saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -127,7 +127,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and save if implicitly saved" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -145,7 +145,7 @@ describe EasyRoles do
     
     describe "bang method" do
       it "should save to the database if the bang method is used" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role! 'admin'
         user.is_admin?.should be_true
         user.reload
@@ -154,7 +154,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and save" do
-        user = SerializeUser.create(:name => "Ryan")
+        user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -207,7 +207,7 @@ describe EasyRoles do
     
     describe "normal methods" do
       it "should not save to the database if not implicitly saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.reload
@@ -216,7 +216,7 @@ describe EasyRoles do
       end
     
       it "should save to the database if implicity saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -226,7 +226,7 @@ describe EasyRoles do
       end
       
       it "should clear all roles and not save if not implicitly saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -241,7 +241,7 @@ describe EasyRoles do
       end
       
       it "should clear all roles and save if implicitly saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -257,7 +257,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and not save unless implicitly saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -272,7 +272,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and save if implicitly saved" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -290,7 +290,7 @@ describe EasyRoles do
     
     describe "bang method" do
       it "should save to the database if the bang method is used" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role! 'admin'
         user.is_admin?.should be_true
         user.reload
@@ -299,7 +299,7 @@ describe EasyRoles do
       end
       
       it "should remove a role and save" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
@@ -314,7 +314,7 @@ describe EasyRoles do
       end
       
       it "should clear all roles and save" do
-        user = BitmaskUser.create(:name => "Ryan")
+        user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save

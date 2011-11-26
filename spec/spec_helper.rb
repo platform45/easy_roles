@@ -7,17 +7,17 @@ require 'easy_roles'
 RSpec.configure do |config|
 end
 
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 def setup_db
-  ActiveRecord::Schema.define(:version => 1) do
+  ActiveRecord::Schema.define(version: 1) do
     create_table :serialize_users do |t|
       t.string :name
-      t.string :roles, :default => "--- []"
+      t.string :roles, default: "--- []"
     end
     create_table :bitmask_users do |t|
       t.string :name
-      t.integer :roles_mask, :default => 0
+      t.integer :roles_mask, default: 0
     end
     
     create_table :memberships do |t|
@@ -41,12 +41,12 @@ end
 setup_db
 
 class SerializeUser < ActiveRecord::Base
-  easy_roles :roles, :method => :serialize
+  easy_roles :roles, method: :serialize
 end
 
 class BitmaskUser < ActiveRecord::Base
   has_many :memberships
-  easy_roles :roles_mask, :method => :bitmask
+  easy_roles :roles_mask, method: :bitmask
   
   ROLES_MASK = %w[admin manager user]
 end
