@@ -26,7 +26,7 @@ Then generate the migration:
 
 Or add a "roles" column to your users model, and set the default value to "--- []". Please note you can call this column anything you like, I like to use the name "roles".
 
-  t.string :roles, :default => "--- []"
+  t.string :roles, default: "--- []"
   
 Then you need to add "easy_roles :column_name" to your model:
 
@@ -46,12 +46,12 @@ Then generate the migration:
 
 Or add a "roles_mask" column to your users model of type 'integer', and set the default value to 0. Please note you can call this column anything you like, I like to use the name "roles_mask":
 
-  t.integer :roles_mask, :default => 0
+  t.integer :roles_mask, default: 0
   
-Add "easy_roles :column_name, :method => :bitmask" to your model.
+Add "easy_roles :column_name, method: :bitmask" to your model.
 
   class User < ActiveRecord::Base
-    easy_roles :roles_mask, :method => :bitmask
+    easy_roles :roles_mask, method: :bitmask
   end
   
 And lastly you need to add a constant variable which stores an array of the different roles for your system. The name of the constant must be the name of your column in full caps.
@@ -59,7 +59,7 @@ And lastly you need to add a constant variable which stores an array of the diff
 ==== WARNING: Bitmask storage relies that you DO NOT change the order of your array of roles, if you need to add a new role, just append it to the end of the array.
 
   class User < ActiveRecord::Base
-    easy_roles :roles_mask, :method => :bitmask
+    easy_roles :roles_mask, method: :bitmask
     
     # Constant variable storing roles in the system
     ROLES_MASK = %w[admin moderator user]
@@ -133,7 +133,7 @@ Then in your AdminsController or any controller that you only want admins to vie
   end
   
   class MarksController < ApplicationController
-     before_filter :admin_required, :only => :create, :update
+     before_filter :admin_required, only: %w(create update)
   end
 
 Follow me on twitter: http://twitter.com/ryan_za
