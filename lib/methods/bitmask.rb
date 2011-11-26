@@ -9,8 +9,9 @@ module EasyRoles
 
       base.send :define_method, :_roles do
         states = base.const_get(column_name.upcase.to_sym)
+        masked_integer = self[column_name.to_sym] || 0
 
-        states.reject { |r| ((self[column_name.to_sym] || 0) & 2**states.index(r)).zero? }
+        states.reject.with_index { |r,i| masked_integer[i].zero? }
       end
       
       base.send :define_method, :has_role? do |role|
