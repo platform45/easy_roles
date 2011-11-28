@@ -1,6 +1,7 @@
 module EasyRoles
   class Bitmask
     def initialize(base, column_name, options)
+
       base.send :define_method, :_roles= do |roles|
         states = base.const_get(column_name.upcase.to_sym)
 
@@ -51,6 +52,18 @@ module EasyRoles
 
         self.save!
       end
+
+      base.class_eval do
+        scope :with_role, proc { |role|
+          states = base.const_get(column_name.upcase.to_sym)
+          raise ArgumentError unless states.include? role
+          role_bit_index = states.index(role)
+          valid_mask_integers = (0..2**states.count-1).select {|i| i[role_bit_index] == 1 }
+          where(column_name => valid_mask_integers)
+        }
+      end
+
+
     end
   end
 end

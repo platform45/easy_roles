@@ -16,17 +16,13 @@ module EasyRoles
   
   module ClassMethods
     def easy_roles(name, options = {})
-      options[:method] ||= :serialize
-     
       begin
         raise NameError unless ALLOWED_METHODS.include? options[:method]
-        
-        "EasyRoles::#{options[:method].to_s.camelize}".constantize.new(self, name, options)     
       rescue NameError
         puts "[Easy Roles] Storage method does not exist reverting to Serialize"
-        
-        EasyRoles::Serialize.new(self, name, options)
+        options[:method] = :serialize
       end
+      "EasyRoles::#{options[:method].to_s.camelize}".constantize.new(self, name, options)
     end
   end
   
