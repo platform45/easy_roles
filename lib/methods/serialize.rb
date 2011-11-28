@@ -48,9 +48,8 @@ module EasyRoles
 
       base.send :private, :make_default_roles
 
-
-      # Scopes (Ugly, no cross-table query support, potentially unsafe. Fix?)
-      # ----------------------------------------------------------------------------------------------------
+      # Scopes:
+      # ---------
       # For security, wrapping markers must be included in the LIKE search, otherwise a user with
       # role 'administrator' would erroneously be included in `User.with_scope('admin')`. 
       #
@@ -61,12 +60,9 @@ module EasyRoles
       # the '!' character.
       #
       # An alternative would be to use JSON instead of YAML to serialize the data, but I've wrestled
-      # countless SerializationTypeMismatch errors trying to accomplish this, in vain.
-      # 
-      # Adding a dependancy to something like Squeel would allow for cleaner syntax in the `where()`, with the
-      # added bonus of supporting complex cross-table queries. The real problem, of course, is even trying to 
-      # query serialized data. I'm unsure how well this would work in different ruby versions or implementations,
-      # which may handle object dumping differently.
+      # countless SerializationTypeMismatch errors trying to accomplish this, in vain. The real problem, of course,
+      # is even trying to query serialized data. I'm unsure how well this would work in different ruby versions or
+      # implementations, which may handle object dumping differently. Bitmasking seems to be a more reliable strategy.
 
       base.class_eval do
         const_set :ROLES_MARKER, '!'
