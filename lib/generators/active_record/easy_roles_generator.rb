@@ -9,6 +9,9 @@ module ActiveRecord
       class_option :use_bitmask_method, type: :boolean, required: false, default: false, 
         desc: 'Setup migration for Bitmask method'
 
+      class_option :add_index, type: :boolean, required: false, default: false, 
+        desc: 'Add an index to the relevant column'
+
       desc 'Internal use by easy_roles generator - use that instead'
 
       source_root File.expand_path('../templates', __FILE__)
