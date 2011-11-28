@@ -1,9 +1,10 @@
 class AddBitmaskRolesTo<%= table_name.camelize %> < ActiveRecord::Migration
-  def self.up
-    add_column :<%= table_name %>, :<%= self.role_col %>, :integer, :default => 0
-  end
-
-  def self.down
-    remove_column :<%= table_name.to_sym %>, :<%= self.role_col %>
+  def change
+    change_table :<%= table_name %> do |t|
+      t.integer :<%= self.role_col %>, default: 0
+     <%- if options.add_index -%>
+      t.index :<%= self.role_col %>
+     <%- end -%>
+    end
   end
 end
