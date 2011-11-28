@@ -198,7 +198,6 @@ describe EasyRoles do
         it "should prove that wrapper markers are a necessary strategy by failing without them" do
           marker_cache = SerializeUser::ROLES_MARKER
           SerializeUser::ROLES_MARKER = ''
-          (chuck = SerializeUser.create(name: 'Mr. Norris')).add_role!('recursion')
           (morgan = SerializeUser.create(name: 'Mr. Freeman')).add_role!('onrecursionrecursi')
           SerializeUser.with_role('recursion').include?(morgan).should be_true
           SerializeUser::ROLES_MARKER = marker_cache
@@ -207,15 +206,16 @@ describe EasyRoles do
         it "should avoid incorrectly matching roles where the name is a subset of another role's name" do
           (chuck = SerializeUser.create(name: 'Mr. Norris')).add_role!('recursion')
           (morgan = SerializeUser.create(name: 'Mr. Freeman')).add_role!('onrecursionrecursi')
+          SerializeUser.with_role('recursion').include?(chuck).should be_true
           SerializeUser.with_role('recursion').include?(morgan).should be_false
         end
 
         it "should not allow roles to be added if they include the ROLES_MARKER character" do
           marker_cache = SerializeUser::ROLES_MARKER
-          SerializeUser::MARKER = '!'
+          SerializeUser::ROLES_MARKER = '!'
           user = SerializeUser.create(name: 'Towelie')
           user.add_role!('funkytown!').should be_false
-          SerializeUser::MARKER = marker_cache
+          SerializeUser::ROLES_MARKER = marker_cache
         end
 
         it "should correctly handle markers on failed saves" do

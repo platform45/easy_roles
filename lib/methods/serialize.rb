@@ -15,13 +15,18 @@ module EasyRoles
       base.send :define_method, :add_role do |role|
         clear_roles if self[column_name.to_sym].blank?
 
+        marker = base::ROLES_MARKER
+        return false if (!marker.empty? && role.include?(marker))
+
         has_role?(role) ? false : self[column_name.to_sym] << role
       end
 
       base.send :define_method, :add_role! do |role|
-        return false if !base::ROLES_MARKER.empty? && role.include?(base::ROLES_MARKER)
-        add_role(role)
-        self.save!
+        if add_role(role)
+          self.save!
+        else 
+          return false
+        end
       end
 
       base.send :define_method, :remove_role do |role|
@@ -65,6 +70,10 @@ module EasyRoles
 
       base.class_eval do
         const_set :ROLES_MARKER, '!'
+        scope :with_role, proc { |r|
+          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
+          where(query)
+        }
 
         define_method :add_role_markers do
           self[column_name.to_sym].map! { |r| [base::ROLES_MARKER,r,base::ROLES_MARKER].join }
@@ -79,11 +88,6 @@ module EasyRoles
         after_save :strip_role_markers
         after_rollback :strip_role_markers
         after_find :strip_role_markers
-
-        scope :with_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
-          where(query)
-        }
       end
 
     end
