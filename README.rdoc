@@ -136,6 +136,20 @@ Then in your AdminsController or any controller that you only want admins to vie
      before_filter :admin_required, only: %w(create update)
   end
 
+== Scopes
+
+By default, easy_roles adds the `with_role` scope to your models.
+
+  @admins = User.with_role('admin')
+
+If you're using the bitmask method, an ArgumentError will be thrown if an undeclared scope is queried. Since an `ActiveRecord::Relation` is returned, the query is chainable:
+
+  BitmaskUser.with_role('admin').where(active: true).to_sql
+  # => SELECT "bitmask_users".* FROM "bitmask_users" WHERE "bitmask_users"."roles_mask" IN (1, 3, 5, 7) AND "bitmask_users"."active" = 't'
+  
+  SerializeUser.with_role('admin').where(active: true).to_sql
+  # => SELECT "serialize_users".* FROM "serialize_users" WHERE "serialize_users"."active" = 't' AND (serialize_users.roles LIKE "%!admin!%")
+
 Follow me on twitter: http://twitter.com/ryan_za
 
 Email: ryan *at* platform45.com
