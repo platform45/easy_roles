@@ -9,28 +9,28 @@ module EasyRoles
       end
 
       base.send :define_method, :has_role? do |role|
-        self[column_name.to_sym].include?(role)
+        self[column_name.to_sym].include?(role.to_s)
       end
 
       base.send :define_method, :add_role do |role|
         clear_roles if self[column_name.to_sym].blank?
 
         marker = base::ROLES_MARKER
-        return false if (!marker.empty? && role.include?(marker))
+        return false if (!marker.empty? && role.to_s.include?(marker))
 
-        has_role?(role) ? false : self[column_name.to_sym] << role
+        has_role?(role.to_s) ? false : self[column_name.to_sym] << role.to_s
       end
 
       base.send :define_method, :add_role! do |role|
         if add_role(role)
           self.save!
-        else 
+        else
           return false
         end
       end
 
       base.send :define_method, :remove_role do |role|
-        self[column_name.to_sym].delete(role)
+        self[column_name.to_sym].delete(role.to_s)
       end
 
       base.send :define_method, :remove_role! do |role|
@@ -51,11 +51,11 @@ module EasyRoles
       # Scopes:
       # ---------
       # For security, wrapping markers must be included in the LIKE search, otherwise a user with
-      # role 'administrator' would erroneously be included in `User.with_scope('admin')`. 
+      # role 'administrator' would erroneously be included in `User.with_scope('admin')`.
       #
       # Rails uses YAML for serialization, so the markers are newlines. Unfortunately, sqlite can't match
       # newlines reliably, and it doesn't natively support REGEXP. Therefore, hooks are currently being used
-      # to wrap roles in '!' markers when talking to the database. This is hacky, but unavoidable. 
+      # to wrap roles in '!' markers when talking to the database. This is hacky, but unavoidable.
       # The implication is that, for security, it must be actively enforced that role names cannot include
       # the '!' character.
       #
@@ -67,14 +67,14 @@ module EasyRoles
       base.class_eval do
         const_set :ROLES_MARKER, '!'
         scope :with_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
+          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r.to_s,base::ROLES_MARKER,'%"'].join
           where(query)
         }
 
         define_method :add_role_markers do
           self[column_name.to_sym].map! { |r| [base::ROLES_MARKER,r,base::ROLES_MARKER].join }
         end
-      
+
         define_method :strip_role_markers do
           self[column_name.to_sym].map! { |r| r.gsub(base::ROLES_MARKER,'') }
         end
