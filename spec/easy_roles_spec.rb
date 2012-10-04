@@ -7,79 +7,79 @@ describe EasyRoles do
       user.add_role 'admin'
       user.roles.include?("admin").should be_true
     end
-    
+
     it "should return true for is_admin? if the admin role is added to the user" do
       user = SerializeUser.new
       user.add_role 'admin'
       user.is_admin?.should be_true
     end
-    
+
     it "should return true for has_role? 'admin' if the admin role is added to the user" do
       user = SerializeUser.new
       user.add_role 'admin'
       user.has_role?('admin').should be_true
     end
-    
+
     it "should turn false for has_role? 'manager' if manager role is not added to the user" do
       user = SerializeUser.new
       user.has_role?('manager').should be_false
     end
-    
+
     it "should turn false for is_manager? if manager role is not added to the user" do
       user = SerializeUser.new
       user.is_manager?.should be_false
     end
-    
+
     it "should return the users role through association" do
       user = BitmaskUser.create(name: 'Bob')
       user.add_role! "admin"
-      
+
       membership = Membership.create(name: 'Test Membership', bitmask_user: user)
-      
+
       Membership.last.bitmask_user.is_admin?.should be_true
     end
-    
+
     it "should get no method error if no easy roles on model" do
       begin
       b = Beggar.create(name: 'Ivor')
-      
+
       b.is_admin?
       rescue => e
         e.class.should == NoMethodError
       end
     end
-    
+
     it "should get no method error if no easy roles on model even through association" do
       begin
       b = Beggar.create(name: 'Ivor')
       m = Membership.create(name: 'Beggars club', beggar: b)
-      
+
       Membership.last.beggar.is_admin?
       rescue => e
         e.class.should == NoMethodError
       end
     end
-    
+
     describe "normal methods" do
       it "should not save to the database if not implicitly saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.reload
-      
+
         user.is_admin?.should be_false
       end
-    
+
       it "should save to the database if implicity saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
       end
-      
+
       it "should clear all roles and not save if not implicitly saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
@@ -87,14 +87,14 @@ describe EasyRoles do
         user.save
         user.reload
         user.is_admin?.should be_true
-        
+
         user.clear_roles
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_true
       end
-      
+
       it "should clear all roles and save if implicitly saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
@@ -102,69 +102,69 @@ describe EasyRoles do
         user.save
         user.reload
         user.is_admin?.should be_true
-        
+
         user.clear_roles
         user.is_admin?.should be_false
         user.save
         user.reload
-        
+
         user.is_admin?.should be_false
       end
-      
+
       it "should remove a role and not save unless implicitly saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role 'admin'
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_true
       end
-      
+
       it "should remove a role and save if implicitly saved" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role 'admin'
         user.is_admin?.should be_false
         user.save
         user.reload
-        
+
         user.is_admin?.should be_false
       end
     end
-    
+
     describe "bang method" do
       it "should save to the database if the bang method is used" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role! 'admin'
         user.is_admin?.should be_true
         user.reload
-      
+
         user.is_admin?.should be_true
       end
-      
+
       it "should remove a role and save" do
         user = SerializeUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role! 'admin'
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_false
       end
     end
@@ -188,11 +188,15 @@ describe EasyRoles do
 
         it "should be chainable" do
           (daniel = SerializeUser.create(name: 'Daniel')).add_role! 'user'
-          (ryan = SerializeUser.create(name: 'Ryan')).add_role! 'user' 
+          (ryan = SerializeUser.create(name: 'Ryan')).add_role! 'user'
           ryan.add_role! 'admin'
           admin_users = SerializeUser.with_role('user').with_role('admin')
           admin_users.include?(ryan).should be_true
           admin_users.include?(daniel).should be_false
+
+          expect do
+            admin_users = SerializeUser.with_role('user').with_role('admin').count
+          end.to_not raise_error
         end
 
         it "should prove that wrapper markers are a necessary strategy by failing without them" do
@@ -229,62 +233,62 @@ describe EasyRoles do
       end
     end
   end
-  
+
   describe "bitmask method" do
     it "should allow me to set a users role" do
       user = BitmaskUser.new
       user.add_role 'admin'
       user._roles.include?("admin").should be_true
     end
-    
+
     it "should return true for is_admin? if the admin role is added to the user" do
       user = BitmaskUser.new
       user.add_role 'admin'
       user.is_admin?.should be_true
     end
-    
+
     it "should return true for has_role? 'admin' if the admin role is added to the user" do
       user = BitmaskUser.new
       user.add_role 'admin'
       user.has_role?('admin').should be_true
     end
-    
+
     it "should turn false for has_role? 'manager' if manager role is not added to the user" do
       user = BitmaskUser.new
       user.has_role?('manager').should be_false
     end
-    
+
     it "should turn false for is_manager? if manager role is not added to the user" do
       user = BitmaskUser.new
       user.is_manager?.should be_false
     end
-    
+
     it "should not allow you to add a role not in the array list of roles" do
       user = BitmaskUser.new
       user.add_role 'lolcat'
       user.is_lolcat?.should be_false
     end
-    
+
     describe "normal methods" do
       it "should not save to the database if not implicitly saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.reload
-      
+
         user.is_admin?.should be_false
       end
-    
+
       it "should save to the database if implicity saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
       end
-      
+
       it "should clear all roles and not save if not implicitly saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
@@ -292,14 +296,14 @@ describe EasyRoles do
         user.save
         user.reload
         user.is_admin?.should be_true
-        
+
         user.clear_roles
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_true
       end
-      
+
       it "should clear all roles and save if implicitly saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
@@ -307,72 +311,72 @@ describe EasyRoles do
         user.save
         user.reload
         user.is_admin?.should be_true
-        
+
         user.clear_roles
         user.is_admin?.should be_false
         user.save
         user.reload
-        
+
         user.is_admin?.should be_false
       end
-      
+
       it "should remove a role and not save unless implicitly saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role 'admin'
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_true
       end
-      
+
       it "should remove a role and save if implicitly saved" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role 'admin'
         user.is_admin?.should be_false
         user.save
         user.reload
-        
+
         user.is_admin?.should be_false
       end
     end
-    
+
     describe "bang method" do
       it "should save to the database if the bang method is used" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role! 'admin'
         user.is_admin?.should be_true
         user.reload
-      
+
         user.is_admin?.should be_true
       end
-      
+
       it "should remove a role and save" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
         user.is_admin?.should be_true
         user.save
         user.reload
-      
+
         user.is_admin?.should be_true
         user.remove_role! 'admin'
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_false
       end
-      
+
       it "should clear all roles and save" do
         user = BitmaskUser.create(name: 'Ryan')
         user.add_role 'admin'
@@ -380,11 +384,11 @@ describe EasyRoles do
         user.save
         user.reload
         user.is_admin?.should be_true
-        
+
         user.clear_roles!
         user.is_admin?.should be_false
         user.reload
-        
+
         user.is_admin?.should be_false
       end
     end
@@ -412,7 +416,7 @@ describe EasyRoles do
 
         it "should be chainable" do
           (daniel = BitmaskUser.create(name: 'Daniel')).add_role! 'user'
-          (ryan = BitmaskUser.create(name: 'Ryan')).add_role! 'user' 
+          (ryan = BitmaskUser.create(name: 'Ryan')).add_role! 'user'
           ryan.add_role! 'admin'
           admin_users = BitmaskUser.with_role('user').with_role('admin')
           admin_users.include?(ryan).should be_true
@@ -421,5 +425,93 @@ describe EasyRoles do
       end
     end
 
+  end
+
+  describe "symbol support" do
+    # For class Serialize & Bitmask
+    # Only add_role, remove_role, has_role and with_role methods are affected
+    # And other methods are dependent on them, no need to test
+
+    context "on serialize method" do
+      describe "#add_role" do
+        it "should convert symbol to string before storage" do
+          user = SerializeUser.new
+          user.add_role :admin
+          user.roles.include?("admin").should be_true
+        end
+      end
+
+      describe "#has_role" do
+        it "should convert symbol to string before comparison" do
+          user = SerializeUser.new
+          user.add_role 'admin'
+          user.roles.include?("admin").should be_true # To be sure
+
+          user.has_role?(:admin).should be_true
+        end
+      end
+
+      describe "#remove_role" do
+        it "should convert symbol to string before removal" do
+          user = SerializeUser.create(name: 'Ryan')
+          user.add_role 'admin'
+          user.roles.include?("admin").should be_true
+
+          user.remove_role :admin
+          user.roles.include?("admin").should be_false
+        end
+      end
+
+      describe "#with_role" do
+        it "should convert symbol to string before searching" do
+          user = SerializeUser.create(name: 'Daniel')
+          SerializeUser.with_role(:admin).should_not include(user)
+          user.add_role! 'admin'
+          SerializeUser.with_role(:admin).should include(user)
+        end
+      end
+
+    end
+
+    context "on bitmask method" do
+      describe "#add_role" do
+        it "should convert symbol to string before storage" do
+          user = BitmaskUser.new
+          user.add_role :admin
+          user._roles.include?("admin").should be_true
+        end
+      end
+
+      describe "#has_role" do
+        it "should convert symbol to string before comparison" do
+          user = BitmaskUser.new
+          user.add_role 'admin'
+          user._roles.include?("admin").should be_true # To be sure
+
+          user.has_role?(:admin).should be_true
+        end
+      end
+
+      describe "#remove_role" do
+        it "should convert symbol to string before removal" do
+          user = BitmaskUser.create(name: 'Ryan')
+          user.add_role 'admin'
+          user._roles.include?("admin").should be_true
+
+          user.remove_role :admin
+          user._roles.include?("admin").should be_false
+        end
+      end
+
+      describe "#with_role" do
+        it "should convert symbol to string before searching" do
+          user = BitmaskUser.create(name: 'Daniel')
+          BitmaskUser.with_role(:admin).should_not include(user)
+          user.add_role! 'admin'
+          BitmaskUser.with_role(:admin).should include(user)
+        end
+      end
+
+    end
   end
 end

@@ -75,14 +75,24 @@ adding a role to a user
 removing a role from a user
   remove_role 'role'
   
+For every method above there is a bang method too.
+  add_role! 'role'
+  remove_role! 'role'
+  
 check to see if a user has a certain role
   has_role? 'role'
   # or
   is_role? # role being anything you like, for example 'is_admin?' or 'is_awesome?'
-  
-For every method above there is a bang method too.
-  add_role! 'role'
-  remove_role! 'role'
+
+=== Symbol Support
+
+You can also pass a symbol as parameter, they will be converted into string
+
+  add_role :role
+  add_role! :role
+  remove_role :role
+  remove_role! :role
+  has_role? :role
   
 == Examples
 
@@ -141,6 +151,8 @@ Then in your AdminsController or any controller that you only want admins to vie
 By default, easy_roles adds the `with_role` scope to your models.
 
   @admins = User.with_role('admin')
+or
+  @admins = User.with_role(:admin) # Converted into string before query
 
 If you're using the bitmask method, an ArgumentError will be thrown if an undeclared scope is queried. Since an `ActiveRecord::Relation` is returned, the query is chainable:
 
