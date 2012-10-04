@@ -67,7 +67,8 @@ module EasyRoles
       base.class_eval do
         const_set :ROLES_MARKER, '!'
         scope :with_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r.to_s,base::ROLES_MARKER,'%"'].join
+          # In PostgreSQL using double quote for string fails
+          query = "#{self.table_name}.#{column_name} LIKE " + "'%#{base::ROLES_MARKER}#{r.to_s}#{base::ROLES_MARKER}%'"
           where(query)
         }
 

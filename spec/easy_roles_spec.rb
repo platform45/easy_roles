@@ -193,6 +193,10 @@ describe EasyRoles do
           admin_users = SerializeUser.with_role('user').with_role('admin')
           admin_users.include?(ryan).should be_true
           admin_users.include?(daniel).should be_false
+
+          expect do
+            admin_users = SerializeUser.with_role('user').with_role('admin').count
+          end.to_not raise_error
         end
 
         it "should prove that wrapper markers are a necessary strategy by failing without them" do
