@@ -18,9 +18,9 @@ module ActiveRecord
 
       def copy_easy_roles_migration
         if options.use_bitmask_method
-          migration_template 'migration_bitmask.rb', "db/migrate/add_bitmask_roles_to_#{table_name}"
+          migration_template 'migration_bitmask.rb', "db/migrate/add_bitmask_roles_to_#{table_name}.rb"
         else
-          migration_template 'migration_non_bitmask.rb', "db/migrate/add_easy_roles_to_#{table_name}"
+          migration_template 'migration_non_bitmask.rb', "db/migrate/add_easy_roles_to_#{table_name}.rb"
         end
       end
 
