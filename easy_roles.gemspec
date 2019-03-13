@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{easy_roles}
-  s.version = "2.0.0.beta2"
+  s.version = "2.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Platform45}]
