@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<activesupport>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<activerecord>, [">= 0"])
-      s.add_dependency(%q<sqlite3>, ["~> 1.3.6"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
     end
   else
     s.add_dependency(%q<activesupport>, [">= 0"])
