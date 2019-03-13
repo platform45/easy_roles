@@ -6,8 +6,6 @@ describe EasyRoles do
       user = SerializeUser.new
       user.add_role 'admin'
       expect(user.roles).to include("admin")
-
-      #user.roles.include?("admin").should be true
     end
 
     it "should return true for is_admin? if the admin role is added to the user" do
