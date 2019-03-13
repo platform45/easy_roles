@@ -49,7 +49,7 @@ DEPENDENCIES
   activerecord
   easy_roles!
   rspec
-  sqlite3 (~> 1.3.6)
+  sqlite3
 
 BUNDLED WITH
    1.16.2
