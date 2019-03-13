@@ -1,1 +1,5 @@
+pkg
+doc
+Manifest
+*.gem 
 .ruby-*
