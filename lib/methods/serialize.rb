@@ -24,7 +24,7 @@ module EasyRoles
       base.send :define_method, :add_role! do |role|
         if add_role(role)
           self.save!
-        else 
+        else
           return false
         end
       end
@@ -51,11 +51,11 @@ module EasyRoles
       # Scopes:
       # ---------
       # For security, wrapping markers must be included in the LIKE search, otherwise a user with
-      # role 'administrator' would erroneously be included in `User.with_scope('admin')`. 
+      # role 'administrator' would erroneously be included in `User.with_scope('admin')`.
       #
       # Rails uses YAML for serialization, so the markers are newlines. Unfortunately, sqlite can't match
       # newlines reliably, and it doesn't natively support REGEXP. Therefore, hooks are currently being used
-      # to wrap roles in '!' markers when talking to the database. This is hacky, but unavoidable. 
+      # to wrap roles in '!' markers when talking to the database. This is hacky, but unavoidable.
       # The implication is that, for security, it must be actively enforced that role names cannot include
       # the '!' character.
       #
@@ -66,15 +66,24 @@ module EasyRoles
 
       base.class_eval do
         const_set :ROLES_MARKER, '!'
+        
+        attr_accessor :roles_marker
+        @roles_marker = '!'
+        
         scope :with_role, proc { |r|
           query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
+          where(query)
+        }
+
+        scope :without_role, proc { |r|
+          query = "#{self.table_name}.#{column_name} NOT LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
           where(query)
         }
 
         define_method :add_role_markers do
           self[column_name.to_sym].map! { |r| [base::ROLES_MARKER,r,base::ROLES_MARKER].join }
         end
-      
+
         define_method :strip_role_markers do
           self[column_name.to_sym].map! { |r| r.gsub(base::ROLES_MARKER,'') }
         end

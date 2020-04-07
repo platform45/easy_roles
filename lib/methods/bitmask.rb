@@ -14,7 +14,7 @@ module EasyRoles
 
         states.reject.with_index { |r,i| masked_integer[i].zero? }
       end
-      
+
       base.send :define_method, :has_role? do |role|
         self._roles.inspect
 
@@ -47,7 +47,7 @@ module EasyRoles
         self[column_name.to_sym] = 0
       end
 
-      base.send :define_method, :clear_roles! do 
+      base.send :define_method, :clear_roles! do
         self.clear_roles
 
         self.save!
@@ -56,6 +56,14 @@ module EasyRoles
       base.class_eval do
         scope :with_role, proc { |role|
           states = base.const_get(column_name.upcase.to_sym)
+          raise ArgumentError unless states.include? role
+          role_bit_index = states.index(role)
+          valid_mask_integers = (0..2**states.count-1).select {|i| i[role_bit_index] == 1 }
+          where(column_name => valid_mask_integers)
+        }
+        scope :without_role, proc { |role|
+          states = base.const_get(column_name.upcase.to_sym)
+          print states.inspect
           raise ArgumentError unless states.include? role
           role_bit_index = states.index(role)
           valid_mask_integers = (0..2**states.count-1).select {|i| i[role_bit_index] == 1 }

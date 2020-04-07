@@ -171,6 +171,32 @@ describe EasyRoles do
 
     describe "scopes" do
       describe "with_role" do
+        describe "with markers" do
+          before do
+            @marker_cache = SerializeUser::ROLES_MARKER
+          end
+
+          after do
+            SerializeUser::ROLES_MARKER = @marker_cache
+          end
+
+          it "should prove that wrapper markers are a necessary strategy by failing without them" do
+            # marker_cache = SerializeUser::ROLES_MARKER
+            SerializeUser::ROLES_MARKER = ''
+            (morgan = SerializeUser.create(name: 'Mr. Freeman')).add_role!('onrecursionrecursi')
+            expect(SerializeUser.with_role('recursion').include?(morgan)).to eq(true)
+            # SerializeUser::ROLES_MARKER = marker_cache
+          end
+
+          it "should not allow roles to be added if they include the ROLES_MARKER character" do
+            # marker_cache = SerializeUser::ROLES_MARKER
+            SerializeUser::ROLES_MARKER = '!'
+            user = SerializeUser.create(name: 'Towelie')
+            expect(user.add_role!('funkytown!')).to eq(false)
+            # SerializeUser::ROLES_MARKER = marker_cache
+          end
+        end
+
         it "should implement the `with_role` scope" do
           expect(SerializeUser.respond_to?(:with_role)).to eq(true)
         end
@@ -195,13 +221,7 @@ describe EasyRoles do
           expect(admin_users.include?(daniel)).to eq(false)
         end
 
-        it "should prove that wrapper markers are a necessary strategy by failing without them" do
-          marker_cache = SerializeUser::ROLES_MARKER
-          SerializeUser::ROLES_MARKER = ''
-          (morgan = SerializeUser.create(name: 'Mr. Freeman')).add_role!('onrecursionrecursi')
-          expect(SerializeUser.with_role('recursion').include?(morgan)).to eq(true)
-          SerializeUser::ROLES_MARKER = marker_cache
-        end
+        
 
         it "should avoid incorrectly matching roles where the name is a subset of another role's name" do
           (chuck = SerializeUser.create(name: 'Mr. Norris')).add_role!('recursion')
@@ -210,13 +230,7 @@ describe EasyRoles do
           expect(SerializeUser.with_role('recursion').include?(morgan)).to eq(false)
         end
 
-        it "should not allow roles to be added if they include the ROLES_MARKER character" do
-          marker_cache = SerializeUser::ROLES_MARKER
-          SerializeUser::ROLES_MARKER = '!'
-          user = SerializeUser.create(name: 'Towelie')
-          expect(user.add_role!('funkytown!')).to eq(false)
-          SerializeUser::ROLES_MARKER = marker_cache
-        end
+        
 
         it "should correctly handle markers on failed saves" do
           the_king = UniqueSerializeUser.create(name: 'Elvis')
