@@ -15,7 +15,7 @@ module EasyRoles
       base.send :define_method, :add_role do |role|
         clear_roles if self[column_name.to_sym].blank?
 
-        marker = base::ROLES_MARKER
+        marker = @@roles_marker
         return false if (!marker.empty? && role.include?(marker))
 
         has_role?(role) ? false : self[column_name.to_sym] << role
@@ -65,27 +65,33 @@ module EasyRoles
       # implementations, which may handle object dumping differently. Bitmasking seems to be a more reliable strategy.
 
       base.class_eval do
-        const_set :ROLES_MARKER, '!'
+        @@roles_marker = '!'
         
-        attr_accessor :roles_marker
-        @roles_marker = '!'
+        def self.roles_marker
+          @@roles_marker
+        end
+
+        def self.roles_marker=(value)
+          @@roles_marker = value
+        end
+        
         
         scope :with_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
+          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',@@roles_marker,r,@@roles_marker,'%"'].join
           where(query)
         }
 
         scope :without_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} NOT LIKE " + ['"%',base::ROLES_MARKER,r,base::ROLES_MARKER,'%"'].join
+          query = "#{self.table_name}.#{column_name} NOT LIKE " + ['"%',@@roles_marker,r,@@roles_marker,'%"'].join
           where(query)
         }
 
         define_method :add_role_markers do
-          self[column_name.to_sym].map! { |r| [base::ROLES_MARKER,r,base::ROLES_MARKER].join }
+          self[column_name.to_sym].map! { |r| [@@roles_marker,r,@@roles_marker].join }
         end
 
         define_method :strip_role_markers do
-          self[column_name.to_sym].map! { |r| r.gsub(base::ROLES_MARKER,'') }
+          self[column_name.to_sym].map! { |r| r.gsub(@@roles_marker,'') }
         end
 
         private :add_role_markers, :strip_role_markers

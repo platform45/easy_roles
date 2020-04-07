@@ -173,27 +173,23 @@ describe EasyRoles do
       describe "with_role" do
         describe "with markers" do
           before do
-            @marker_cache = SerializeUser::ROLES_MARKER
+            @marker_cache = SerializeUser.roles_marker
           end
 
           after do
-            SerializeUser::ROLES_MARKER = @marker_cache
+            SerializeUser.roles_marker = @marker_cache
           end
 
           it "should prove that wrapper markers are a necessary strategy by failing without them" do
-            # marker_cache = SerializeUser::ROLES_MARKER
-            SerializeUser::ROLES_MARKER = ''
+            SerializeUser.roles_marker = ''
             (morgan = SerializeUser.create(name: 'Mr. Freeman')).add_role!('onrecursionrecursi')
             expect(SerializeUser.with_role('recursion').include?(morgan)).to eq(true)
-            # SerializeUser::ROLES_MARKER = marker_cache
           end
 
-          it "should not allow roles to be added if they include the ROLES_MARKER character" do
-            # marker_cache = SerializeUser::ROLES_MARKER
-            SerializeUser::ROLES_MARKER = '!'
+          it "should not allow roles to be added if they include the roles_marker character" do
+            SerializeUser.roles_marker = '!'
             user = SerializeUser.create(name: 'Towelie')
             expect(user.add_role!('funkytown!')).to eq(false)
-            # SerializeUser::ROLES_MARKER = marker_cache
           end
         end
 
@@ -237,7 +233,7 @@ describe EasyRoles do
           (imposter = UniqueSerializeUser.create(name: 'Elvisbot')).add_role!('sings-like-a-robot')
           imposter.name = 'Elvis'
           expect(imposter.save).to eq(false)
-          expect(imposter.roles.any? {|r| r.include?(SerializeUser::ROLES_MARKER) }).to eq(false)
+          expect(imposter.roles.any? {|r| r.include?(SerializeUser.roles_marker) }).to eq(false)
         end
 
       end
