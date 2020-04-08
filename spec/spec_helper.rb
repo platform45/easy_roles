@@ -44,8 +44,6 @@ setup_db
 
 class SerializeUser < ActiveRecord::Base
   easy_roles :roles, method: :serialize
-
-  # ActiveRecord_Relation = ActiveRecord::Relation
 end
 
 class UniqueSerializeUser < SerializeUser

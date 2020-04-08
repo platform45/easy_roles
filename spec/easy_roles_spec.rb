@@ -196,7 +196,9 @@ describe EasyRoles do
         end
 
         it 'should return an ActiveRecord::Relation' do
-          expect(SerializeUser.with_role('admin').class).to eq(SerializeUser::ActiveRecord_Relation)
+          expect(SerializeUser.with_role('admin').class).to eq(
+            "SerializeUser::ActiveRecord_Relation".constantize
+          )
         end
 
         it 'should match records for a given role' do
@@ -401,7 +403,9 @@ describe EasyRoles do
         end
 
         it 'should return an ActiveRecord::Relation' do
-          expect(BitmaskUser.with_role('admin').class).to eq(BitmaskUser::ActiveRecord_Relation)
+          expect(BitmaskUser.with_role('admin').class).to eq(
+            "BitmaskUser::ActiveRecord_Relation".constantize
+          )
         end
 
         it 'should raise an ArgumentError for undefined roles' do

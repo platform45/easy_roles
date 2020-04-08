@@ -84,9 +84,12 @@ module EasyRoles
         # rubocop:enable Style/ClassVars
 
         scope :with_role, (proc { |r|
+          # q =
           where(
             "#{table_name}.#{column_name} LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\""
           )
+          # print q.class.inspect
+          # q
         })
 
         scope :without_role, (proc { |r|
