@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
@@ -13,7 +15,7 @@ def setup_db
   ActiveRecord::Schema.define(version: 1) do
     create_table :serialize_users do |t|
       t.string :name
-      t.string :roles, default: "--- []"
+      t.string :roles, default: '--- []'
     end
     create_table :bitmask_users do |t|
       t.string :name
@@ -43,7 +45,7 @@ setup_db
 class SerializeUser < ActiveRecord::Base
   easy_roles :roles, method: :serialize
 
-  #ActiveRecord_Relation = ActiveRecord::Relation
+  # ActiveRecord_Relation = ActiveRecord::Relation
 end
 
 class UniqueSerializeUser < SerializeUser
@@ -54,7 +56,7 @@ class BitmaskUser < ActiveRecord::Base
   has_many :memberships
   easy_roles :roles_mask, method: :bitmask
 
-  ROLES_MASK = %w[admin manager user]
+  ROLES_MASK = %w[admin manager user].freeze
 end
 
 class Membership < ActiveRecord::Base

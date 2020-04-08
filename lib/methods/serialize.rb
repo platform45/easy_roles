@@ -1,7 +1,12 @@
-module EasyRoles
-  class Serialize
+# frozen_string_literal: true
 
-    def initialize(base, column_name, options)
+module EasyRoles
+  # Serialize support
+  class Serialize
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/CyclomaticComplexity
+    def initialize(base, column_name, _options)
       base.serialize column_name.to_sym, Array
 
       ActiveSupport::Deprecation.silence do
@@ -14,19 +19,15 @@ module EasyRoles
 
       base.send :define_method, :add_role do |role|
         clear_roles if self[column_name.to_sym].blank?
-
-        marker = @@roles_marker
-        return false if (!marker.empty? && role.include?(marker))
+        return false if !@@roles_marker.empty? && role.include?(@@roles_marker)
 
         has_role?(role) ? false : self[column_name.to_sym] << role
       end
 
       base.send :define_method, :add_role! do |role|
-        if add_role(role)
-          self.save!
-        else
-          return false
-        end
+        return false unless add_role(role)
+
+        save!
       end
 
       base.send :define_method, :remove_role do |role|
@@ -35,7 +36,7 @@ module EasyRoles
 
       base.send :define_method, :remove_role! do |role|
         remove_role(role)
-        self.save!
+        save!
       end
 
       base.send :define_method, :clear_roles do
@@ -50,23 +51,29 @@ module EasyRoles
 
       # Scopes:
       # ---------
-      # For security, wrapping markers must be included in the LIKE search, otherwise a user with
-      # role 'administrator' would erroneously be included in `User.with_scope('admin')`.
+      # For security, wrapping markers must be included in the LIKE search,
+      # otherwise a user with role 'administrator' would erroneously be included
+      # in `User.with_scope('admin')`.
       #
-      # Rails uses YAML for serialization, so the markers are newlines. Unfortunately, sqlite can't match
-      # newlines reliably, and it doesn't natively support REGEXP. Therefore, hooks are currently being used
-      # to wrap roles in '!' markers when talking to the database. This is hacky, but unavoidable.
-      # The implication is that, for security, it must be actively enforced that role names cannot include
-      # the '!' character.
+      # Rails uses YAML for serialization, so the markers are newlines.
+      # Unfortunately, sqlite can't match newlines reliably, and it doesn't
+      # natively support REGEXP. Therefore, hooks are currently being used to
+      # wrap roles in '!' markers when talking to the database. This is hacky,
+      # but unavoidable. The implication is that, for security, it must be
+      # actively enforced that role names cannot include the '!' character.
       #
-      # An alternative would be to use JSON instead of YAML to serialize the data, but I've wrestled
-      # countless SerializationTypeMismatch errors trying to accomplish this, in vain. The real problem, of course,
-      # is even trying to query serialized data. I'm unsure how well this would work in different ruby versions or
-      # implementations, which may handle object dumping differently. Bitmasking seems to be a more reliable strategy.
+      # An alternative would be to use JSON instead of YAML to serialize the
+      # data, but I've wrestled countless SerializationTypeMismatch errors
+      # trying to accomplish this, in vain. The real problem, of course, is even
+      # trying to query serialized data. I'm unsure how well this would work in
+      # different ruby versions or implementations, which may handle object
+      # dumping differently. Bitmasking seems to be a more reliable strategy.
 
+      # rubocop:disable Metrics/BlockLength
       base.class_eval do
+        # rubocop:disable Style/ClassVars
         @@roles_marker = '!'
-        
+
         def self.roles_marker
           @@roles_marker
         end
@@ -74,24 +81,26 @@ module EasyRoles
         def self.roles_marker=(value)
           @@roles_marker = value
         end
-        
-        
-        scope :with_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} LIKE " + ['"%',@@roles_marker,r,@@roles_marker,'%"'].join
-          where(query)
-        }
+        # rubocop:enable Style/ClassVars
 
-        scope :without_role, proc { |r|
-          query = "#{self.table_name}.#{column_name} NOT LIKE " + ['"%',@@roles_marker,r,@@roles_marker,'%"'].join
-          where(query)
-        }
+        scope :with_role, (proc { |r|
+          where(
+            "#{table_name}.#{column_name} LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\""
+          )
+        })
+
+        scope :without_role, (proc { |r|
+          where(
+            "#{table_name}.#{column_name} NOT LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\""
+          )
+        })
 
         define_method :add_role_markers do
-          self[column_name.to_sym].map! { |r| [@@roles_marker,r,@@roles_marker].join }
+          self[column_name.to_sym].map! { |r| [@@roles_marker, r, @@roles_marker].join }
         end
 
         define_method :strip_role_markers do
-          self[column_name.to_sym].map! { |r| r.gsub(@@roles_marker,'') }
+          self[column_name.to_sym].map! { |r| r.gsub(@@roles_marker, '') }
         end
 
         private :add_role_markers, :strip_role_markers
@@ -100,7 +109,10 @@ module EasyRoles
         after_rollback :strip_role_markers
         after_find :strip_role_markers
       end
-
+      # rubocop:enable Metrics/BlockLength
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/CyclomaticComplexity
   end
 end
