@@ -2,6 +2,16 @@ Metrics/MethodLength:
   Max: 20
 Layout/LineLength:
   Max: 100
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 AllCops:
   Exclude:
     - 'spec/**/*'
