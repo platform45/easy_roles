@@ -150,9 +150,11 @@ If you're using the bitmask method, an ArgumentError will be thrown if an undecl
   SerializeUser.with_role('admin').where(active: true).to_sql
   # => SELECT "serialize_users".* FROM "serialize_users" WHERE "serialize_users"."active" = 't' AND (serialize_users.roles LIKE "%!admin!%")
 
-Follow me on twitter: http://twitter.com/ryan_za
+easy_roles also supports a without_role scope.
 
-Email: ryan *at* platform45.com
+@non_admins = User.without_role('admin')
+
+Follow me on twitter: http://twitter.com/ryan_za
 
 == License
 
