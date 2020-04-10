@@ -84,19 +84,18 @@ module EasyRoles
         # rubocop:enable Style/ClassVars
 
         scope :with_role, (proc { |r|
-          # q =
           where(
             "#{table_name}.#{column_name} LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\""
           )
-          # print q.class.inspect
-          # q
         })
 
+        # rubocop:disable Layout/LineLength
         scope :without_role, (proc { |r|
           where(
-            "#{table_name}.#{column_name} NOT LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\""
+            "#{table_name}.#{column_name} NOT LIKE \"%#{@@roles_marker}#{r}#{@@roles_marker}%\" or #{table_name}.#{column_name} IS NULL"
           )
         })
+        # rubocop:enable Layout/LineLength
 
         define_method :add_role_markers do
           self[column_name.to_sym].map! { |r| [@@roles_marker, r, @@roles_marker].join }

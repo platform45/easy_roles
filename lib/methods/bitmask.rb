@@ -61,11 +61,10 @@ module EasyRoles
         })
         scope :without_role, (proc { |role|
           states = base.const_get(column_name.upcase.to_sym)
-          print states.inspect
           raise ArgumentError unless states.include? role
 
           role_bit_index = states.index(role)
-          valid_mask_integers = (0..2**states.count - 1).select { |i| i[role_bit_index] == 1 }
+          valid_mask_integers = (0..2**states.count - 1).reject { |i| i[role_bit_index] == 1 }
           where(column_name => valid_mask_integers)
         })
       end
