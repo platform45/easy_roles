@@ -3,7 +3,7 @@
 module EasyRoles
   module Generators
     # Generator class to add EasyRoles to an ActiveRecord model.
-    class EasyRolesGenerator < Rails::Generators::NamedBase
+    class EasyRolesGenerator < Rails::Generators::Base
       namespace 'easy_roles'
 
       argument :role_col, type: :string, required: false, default: 'roles', banner: 'role column'
