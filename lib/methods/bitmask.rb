@@ -21,12 +21,16 @@ module EasyRoles
         _roles.include?(role)
       end
 
-      base.send :define_method, :add_role do |role|
-        self._roles = _roles.push(role).uniq
+      base.send :define_method, :add_role do |*roles|
+        roles.each do |role|
+          self._roles = _roles.push(role).uniq
+        end
       end
 
-      base.send :define_method, :add_role! do |role|
-        add_role(role)
+      base.send :define_method, :add_role! do |*roles|
+        roles.each do |role|
+          add_role(role)
+        end
         save!
       end
 
@@ -51,6 +55,9 @@ module EasyRoles
       end
 
       base.class_eval do
+        alias_method :add_roles, :add_role
+        alias_method :add_roles!, :add_role
+
         scope :with_role, (proc { |role|
           states = base.const_get(column_name.upcase.to_sym)
           raise ArgumentError unless states.include? role
@@ -70,6 +77,7 @@ module EasyRoles
       end
     end
     # rubocop:enable Metrics/AbcSize
+
     # rubocop:enable Metrics/MethodLength
   end
 end
