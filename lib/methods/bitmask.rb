@@ -3,27 +3,25 @@
 module EasyRoles
   # Bitmask support
   class Bitmask
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
     def initialize(base, column_name, _options)
-      base.send :define_method, :_roles= do |roles|
+      base.send :define_method, :roles= do |roles|
         states = base.const_get(column_name.upcase.to_sym)
         self[column_name.to_sym] = (roles & states).map { |r| 2**states.index(r) }.sum
       end
 
-      base.send :define_method, :_roles do
+      base.send :define_method, :roles do
         states = base.const_get(column_name.upcase.to_sym)
         masked_integer = self[column_name.to_sym] || 0
         states.reject.with_index { |_r, i| masked_integer[i].zero? }
       end
 
       base.send :define_method, :has_role? do |role|
-        _roles.include?(role)
+        roles.include?(role)
       end
 
       base.send :define_method, :add_role do |*roles|
         roles.each do |role|
-          self._roles = _roles.push(role).uniq
+          self.roles = self.roles.push(role).uniq
         end
       end
 
@@ -35,9 +33,9 @@ module EasyRoles
       end
 
       base.send :define_method, :remove_role do |role|
-        new_roles = _roles
+        new_roles = roles
         new_roles.delete(role)
-        self._roles = new_roles
+        self.roles = new_roles
       end
 
       base.send :define_method, :remove_role! do |role|
@@ -76,8 +74,5 @@ module EasyRoles
         })
       end
     end
-    # rubocop:enable Metrics/AbcSize
-
-    # rubocop:enable Metrics/MethodLength
   end
 end
