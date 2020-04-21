@@ -7,7 +7,7 @@ Simple rails gem for basic role authorization with ruby on rails.
 Please read the CHANGELOG.md file.
 
 ## Install
-> :warning: I have been maintaining this gem for over a year now and have not had any of my pull requests approved and the original owner has not gotten back to me about transfering ownership. What this means is that I'll eventually need to host this gem at rubygems.org under a different gem name. To use this gem with your Rails application, instead of installing it from the rubygems.org repository, add the folling to your `Gemfile`:
+> :warning: I have been maintaining this gem for over a year now and have not had any of my pull requests approved and the original owner has not gotten back to me about transfering ownership. What this means is that I'll eventually need to host this gem at rubygems.org under a different gem name. To use this gem with your Rails application, instead of installing it from the rubygems.org repository, add the following to your `Gemfile`:
 
 ```ruby
 gem 'easy_roles', git: 'https://github.com/aarona/easy_roles.git'
