@@ -13,11 +13,20 @@ module EasyRoles
         self[column_name.to_sym].include?(role)
       end
 
-      base.send :define_method, :add_role do |role|
+      base.send :define_method, :add_role do |*roles|
         clear_roles if self[column_name.to_sym].blank?
-        return false if !roles_marker.empty? && role.include?(roles_marker)
 
-        has_role?(role) ? false : self[column_name.to_sym] << role
+        roles.each do |role|
+          return false if !roles_marker.empty? && role.include?(roles_marker)
+        end
+
+        roles.each do |role|
+          next if has_role?(role)
+
+          self[column_name.to_sym] << role
+        end
+
+        self[column_name.to_sym]
       end
 
       base.send :define_method, :add_role! do |role|
@@ -66,6 +75,9 @@ module EasyRoles
       # dumping differently. Bitmasking seems to be a more reliable strategy.
 
       base.class_eval do
+        alias_method :add_roles, :add_role
+        alias_method :add_roles!, :add_role
+
         cattr_accessor :roles_marker
         cattr_accessor :column
 
