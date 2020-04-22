@@ -1,3 +1,5 @@
+> :warning: This library is no longer being maintained by the original contributor so I have taken it upon myself to rename the gem and publish it on rubygems.org. You can follow that project [here](https://github.com/aarona/slow_your_roles). Feel free to notify me of any issues that arise as I will be maintaining and supporting it.
+
 # Easy Roles
 
 Simple rails gem for basic role authorization with ruby on rails.
