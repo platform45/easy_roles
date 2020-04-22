@@ -1,4 +1,6 @@
-class AddEasyRolesTo<%= table_name.camelize %> < ActiveRecord::Migration
+# frozen_string_literal: true
+
+class AddEasyRolesTo<%= table_name.camelize %> < ActiveRecord::Migration<%= "[#{Rails::VERSION::STRING[0..2]}]" if Rails::VERSION::MAJOR > 4 %>
   def change
     change_table :<%= table_name %> do |t|
       t.string :<%= self.role_col %>, default: '--- []'

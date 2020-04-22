@@ -1,4 +1,5 @@
 pkg
 doc
 Manifest
-*.gem
+*.gem 
+.ruby-*
