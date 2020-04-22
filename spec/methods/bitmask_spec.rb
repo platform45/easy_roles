@@ -8,18 +8,18 @@ describe EasyRoles do
     it 'should allow me to set a users role' do
       user = BitmaskUser.new
       user.add_role 'admin'
-      expect(user._roles). to include 'admin'
+      expect(user.roles). to include 'admin'
     end
 
     it 'should allow me to set multiple roles at one time' do
       user = BitmaskUser.new
       user.add_roles 'admin', 'manager'
-      expect(user._roles).to include 'admin'
-      expect(user._roles).to include 'manager'
-      expect(user._roles.length).to eq 2
+      expect(user.roles).to include 'admin'
+      expect(user.roles).to include 'manager'
+      expect(user.roles.length).to eq 2
       user.add_roles 'admin', 'manager','user'
-      expect(user._roles).to include 'user'
-      expect(user._roles.length).to eq 3
+      expect(user.roles).to include 'user'
+      expect(user.roles.length).to eq 3
     end
 
     it 'should return true for is_admin? if the admin role is added to the user' do
@@ -53,9 +53,9 @@ describe EasyRoles do
     it 'should only add valid roles when adding multiple roles' do
       user = BitmaskUser.new
       user.add_roles 'admin', 'manager', 'lolcat'
-      expect(user._roles.length).to eq 2
-      expect(user._roles).to include 'admin'
-      expect(user._roles).to include 'manager'
+      expect(user.roles.length).to eq 2
+      expect(user.roles).to include 'admin'
+      expect(user.roles).to include 'manager'
     end
 
     describe 'normal methods' do
@@ -154,12 +154,12 @@ describe EasyRoles do
       it 'should allow me to set multiple roles at one time' do
         user = BitmaskUser.new
         user.add_roles! 'admin', 'manager'
-        expect(user._roles).to include 'admin'
-        expect(user._roles).to include 'manager'
-        expect(user._roles.length).to eq 2
+        expect(user.roles).to include 'admin'
+        expect(user.roles).to include 'manager'
+        expect(user.roles.length).to eq 2
         user.add_roles! 'admin', 'manager','user'
-        expect(user._roles).to include 'user'
-        expect(user._roles.length).to eq 3
+        expect(user.roles).to include 'user'
+        expect(user.roles.length).to eq 3
       end
 
       it 'should remove a role and save' do
